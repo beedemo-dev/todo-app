@@ -1,0 +1,58 @@
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "todo-app-REPLACE_REPO_OWNER"
+  labels:
+    app: "todo-app-REPLACE_REPO_OWNER"
+    app.type: "workshop"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "todo-app-REPLACE_REPO_OWNER"
+  template:
+    metadata:
+      labels:
+        app: "todo-app-REPLACE_REPO_OWNER"
+        app.type: "workshop"
+    spec:
+      containers:
+      - name: "todo-app"
+        image: REPLACE_IMAGE
+        imagePullPolicy: Always 
+---
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: "todo-app-REPLACE_REPO_OWNER"
+  labels:
+    app: "todo-app-REPLACE_REPO_OWNER"
+    app.type: "workshop"
+spec:
+  ports:
+  - protocol: "TCP"
+    port: 80
+    targetPort: 80
+  selector:
+    app: "todo-app-REPLACE_REPO_OWNER"
+  type: "ClusterIP"
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: "ingress-todo-app-REPLACE_REPO_OWNER"
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+  labels:
+    app: "todo-app-REPLACE_REPO_OWNER"
+    app.type: "workshop"
+spec:
+  rules:
+  - host: REPLACE_HOSTNAME
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: "todo-app-REPLACE_REPO_OWNER"
+          servicePort: 80
